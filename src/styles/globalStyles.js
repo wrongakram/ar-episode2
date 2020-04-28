@@ -54,9 +54,9 @@ export const Flex = styled.div`
 `
 
 export const Cursor = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
+  position: fixed;
+  top: 400px;
+  left: 400px;
   width: 32px;
   height: 32px;
   background: #ea281e;
