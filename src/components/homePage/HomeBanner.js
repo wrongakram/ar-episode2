@@ -30,25 +30,19 @@ const HomeBanner = ({ onCursor }) => {
     renderingCtx.fillStyle = currentTheme === "dark" ? "#000000" : "#ffffff"
     renderingCtx.fillRect(0, 0, size.width, size.height)
 
-    renderingElement.addEventListener("mouseover", ev => {
+    const _mouseover = (ev) => {
       moving = true
       lastX = ev.pageX - renderingElement.offsetLeft
       lastY = ev.pageY - renderingElement.offsetTop
-    })
+    }
 
-    renderingElement.addEventListener("click", ev => {
-      moving = true
-      lastX = ev.pageX - renderingElement.offsetLeft
-      lastY = ev.pageY - renderingElement.offsetTop
-    })
-
-    renderingElement.addEventListener("mouseup", ev => {
+    const _mouseup = (ev) => {
       moving = false
       lastX = ev.pageX - renderingElement.offsetLeft
       lastY = ev.pageY - renderingElement.offsetTop
-    })
+    }
 
-    renderingElement.addEventListener("mousemove", ev => {
+    const _mousemove = (ev) => {
       if (moving) {
         drawingCtx.globalCompositeOperation = "source-over"
         renderingCtx.globalCompositeOperation = "destination-out"
@@ -64,7 +58,27 @@ const HomeBanner = ({ onCursor }) => {
         lastY = currentY
         renderingCtx.drawImage(drawingElement, 0, 0)
       }
-    })
+    }
+
+    const _mouseclick = (ev) => {
+      moving = true
+      lastX = ev.pageX - renderingElement.offsetLeft
+      lastY = ev.pageY - renderingElement.offsetTop
+    }
+
+    renderingElement.addEventListener("mouseover", _mouseover)
+    renderingElement.addEventListener("mouseup", _mouseup)
+    renderingElement.addEventListener("mousemove", _mousemove)
+    renderingElement.addEventListener("click", _mouseclick)
+
+    return () => {
+      drawingElement = null
+      drawingElement = renderingElement.cloneNode()
+      renderingElement.removeEventListener("mouseover", _mouseover)
+      renderingElement.removeEventListener("mouseup", _mouseup)
+      renderingElement.removeEventListener("mousemove", _mousemove)
+      renderingElement.addEventListener("click", _mouseclick)
+    }
   }, [currentTheme])
 
   const container = {
